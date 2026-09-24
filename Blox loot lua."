@@ -1,0 +1,102 @@
+                    local d = (mh.Position - hrp.Position).Magnitude
+                    if d < dist then dist = d; closest = mob end
+                end
+            end
+        end
+    end
+    end
+    return closest
+end
+
+local function findNearestEnemy(range, includePlayers)
+    local char = LP.Character
+    if not char then return nil end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return nil end
+    local closest, dist = nil, math.huge
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj:IsA("Model") and obj:FindFirstChildOfClass("Humanoid") then
+            local isP = Players:GetPlayerFromCharacter(obj) ~= nil
+            if (isP and includePlayers) or (not isP) then
+                local h = obj:FindFirstChildOfClass("Humanoid")
+                if h.Health > 0 then
+                    local mh = obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChild("Torso")
+                    if mh then
+                        local d = (mh.Position - hrp.Position).Magnitude
+                        if d < range and d < dist then dist = d; closest = mh end
+                    end
+                end
+            end
+        end
+    end
+    return closest
+end
+
+local function matchLoot(name)
+    if CFG.LootFilter == "All Loot" then return true end
+    return name:lower():find(CFG.LootFilter:lower(), 1, true) ~= nil
+end
+
+RunService.Heartbeat:Connect(function()
+    local char = LP.Character
+    if not char then return end
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    if not hum then return end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+
+    if CFG.GodMode then
+        if hum.Health < hum.MaxHealth then hum.Health = hum.MaxHealth end
+        if hum.MaxHealth ~= math.huge then hum.MaxHealth = math.huge end
+    end
+
+    if CFG.SpeedEnabled and hum.WalkSpeed ~= CFG.SpeedValue then
+        hum.WalkSpeed = CFG.SpeedValue
+    end
+
+    if CFG.NoCooldown then
+        local tool = char:FindFirstChildOfClass("Tool")
+        if tool then
+            for _, v in ipairs(tool:GetDescendants()) do
+                if v:IsA("NumberValue") then
+                    pcall(function() v.Value = 0 end)
+                elseif v:IsA("BoolValue") then
+                    local n = v.Name:lower()
+                    if n:find("cool") or n:find("ready") or n:find("can") then
+                        pcall(function() v.Value = true end)
+                    end
+                end
+            end
+        end
+    end
+
+    if CFG.AutoAttack then
+        local tool = char:FindFirstChildOfClass("Tool")
+        if tool then
+            local target = findNearestEnemy(CFG.AutoAttackRange, false)
+            if target then
+                hrp.CFrame = CFrame.new(hrp.Position, target.Position)
+                pcall(function() tool:Activate() end)
+            end
+        end
+    end
+
+    if CFG.FarmEnabled then
+        local mob = findMob()
+        if mob then
+            local mh = mob:FindFirstChild("HumanoidRootPart") or mob:FindFirstChild("Torso")
+            if mh then
+                if CFG.FarmMode == "TP" then
+                    hrp.CFrame = mh.CFrame + Vector3.new(0,5,0)
+                else
+                    if (hrp.Position - mh.Position).Magnitude > 5 then
+                        hum.WalkSpeed = CFG.FarmSpeed
+                        hum:MoveTo(mh.Position)
+                    end
+                end
+            end
+        end
+    end
+end)
+
+print("[Blocks Farm V13 v7] Loaded!")
