@@ -325,4 +325,184 @@ local spawnButton
 spawnButton = button("Spawn Point: SET", function(b)
     setSpawn()
     b.Text = "Spawn Point: SAVED"
+end)-- AUTO FARM v2 | PART 2/2
+
+button("Руна Йети: OFF", function(b)
+    Runes["Руна Йети"] =
+        not Runes["Руна Йети"]
+
+    b.Text = "Руна Йети: " ..
+        (Runes["Руна Йети"] and "ON" or "OFF")
+end)
+
+button("Руна Леденого Пастя: OFF", function(b)
+    Runes["Руна Леденого Пастя"] =
+        not Runes["Руна Леденого Пастя"]
+
+    b.Text = "Руна Леденого Пастя: " ..
+        (Runes["Руна Леденого Пастя"] and "ON" or "OFF")
+end)
+
+button("Руна Иллюзиониста: OFF", function(b)
+    Runes["Руна Иллюзиониста"] =
+        not Runes["Руна Иллюзиониста"]
+
+    b.Text = "Руна Иллюзиониста: " ..
+        (Runes["Руна Иллюзиониста"] and "ON" or "OFF")
+end)
+
+-- Собственный HP
+
+local HP = Instance.new("TextLabel")
+HP.Size = UDim2.fromOffset(220, 35)
+HP.Position = UDim2.new(0, 15, 0, 15)
+HP.BackgroundTransparency = 0.2
+HP.TextSize = 16
+HP.TextColor3 = Color3.new(1, 1, 1)
+HP.Parent = Gui
+
+RunService.Heartbeat:Connect(function()
+
+    if Humanoid then
+        HP.Text =
+            "HP: "
+            .. math.floor(Humanoid.Health)
+            .. " / "
+            .. math.floor(Humanoid.MaxHealth)
+    end
+
+    if AutoAttack then
+        attack()
+    end
+end)
+
+-- ESP игроков
+
+local function addESP(player)
+
+    if player == LP then
+        return
+    end
+
+    local function setup(char)
+
+        local head = char:FindFirstChild("Head")
+        local hum = char:FindFirstChildOfClass("Humanoid")
+
+        if not head or not hum then
+            return
+        end
+
+        local old = head:FindFirstChild("PlayerESP")
+
+        if old then
+            old:Destroy()
+        end
+
+        if not ESP then
+            return
+        end
+
+        local gui = Instance.new("BillboardGui")
+        gui.Name = "PlayerESP"
+        gui.Size = UDim2.fromOffset(160, 45)
+        gui.StudsOffset = Vector3.new(0, 3, 0)
+        gui.AlwaysOnTop = true
+        gui.Parent = head
+
+        local text = Instance.new("TextLabel")
+        text.Size = UDim2.fromScale(1, 1)
+        text.BackgroundTransparency = 1
+        text.TextColor3 = Color3.new(1, 1, 1)
+        text.TextStrokeTransparency = 0
+        text.TextSize = 14
+        text.Parent = gui
+
+        local function update()
+            text.Text =
+                player.Name
+                .. "\nHP: "
+                .. math.floor(hum.Health)
+        end
+
+        update()
+        hum.HealthChanged:Connect(update)
+    end
+
+    if player.Character then
+        setup(player.Character)
+    end
+
+    player.CharacterAdded:Connect(function(char)
+        task.wait(0.5)
+        setup(char)
+    end)
+end
+
+for _, player in ipairs(Players:GetPlayers()) do
+    addESP(player)
+end
+
+Players.PlayerAdded:Connect(addESP)
+
+local espButton
+
+espButton = button("Player ESP: OFF", function(b)
+
+    ESP = not ESP
+
+    b.Text = "Player ESP: " ..
+        (ESP and "ON" or "OFF")
+
+    for _, player in ipairs(Players:GetPlayers()) do
+
+        if player ~= LP and player.Character then
+
+            local head =
+                player.Character:FindFirstChild("Head")
+
+            if head then
+
+                local old =
+                    head:FindFirstChild("PlayerESP")
+
+                if old then
+                    old:Destroy()
+                end
+
+                if ESP then
+                    addESP(player)
+                end
+            end
+        end
+    end
+end)
+
+-- No Cooldown для собственной игры:
+-- реальный cooldown должен быть отключён
+-- в серверном скрипте оружия.
+--
+-- Здесь клиент просто вызывает Tool:Activate()
+-- без искусственной задержки.
+
+-- Автоэкип после респавна
+
+LP.CharacterAdded:Connect(function(char)
+
+    task.wait(0.7)
+
+    Character = char
+    Humanoid = char:WaitForChild("Humanoid")
+    Root = char:WaitForChild("HumanoidRootPart")
+
+    equipWeapon()
+
+    if SpawnPoint then
+        task.wait(0.2)
+        Root.CFrame = SpawnPoint
+    end
+
+    if AutoFarm then
+        task.spawn(farmLoop)
+    end
 end)
