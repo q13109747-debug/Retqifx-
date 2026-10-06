@@ -219,4 +219,9 @@ local function find_nearest_loot()
     return best
 end
 
-print("[ANON] Часть 1 загружена")loadstring(game:HttpGet("https://raw.githubusercontent.com/q13109747-debug/Retqifx-/main/logic.lua", true))()
+print("[ANON] Часть 1 загружена")
+
+local ok, err = pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/q13109747-debug/Retqifx-/main/main.lua", true))()
+end)
+if not ok then warn("ОШИБКА: " .. tostring(err)) end
