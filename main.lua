@@ -221,4 +221,3 @@ end
 
 print("[ANON] Часть 1 загружена")
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/q13109747-debug/Retqifx-/main/logic.lua", true))()
