@@ -1,0 +1,23 @@
+--[[
+    VEIL Blox Fruits — MAIN LOADER
+]]
+
+local base = "https://raw.githubusercontent.com/q13109747-debug/Retqifx-/main/"
+
+notify = notify or function(t, x, d)
+    pcall(function()
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = t, Text = x, Duration = d or 3
+        })
+    end)
+end
+
+notify("VEIL", "Загрузка Part 1...", 3)
+loadstring(game:HttpGet(base .. "veil_part1.lua"))()
+
+task.wait(1)
+
+notify("VEIL", "Загрузка Part 2...", 3)
+loadstring(game:HttpGet(base .. "veil_part2.lua"))()
+
+notify("VEIL", "Все модули загружены", 5)
