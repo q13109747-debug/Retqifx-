@@ -1,0 +1,422 @@
+--[[
+    VEIL Blox Fruits — PART 2
+    Tabs: Volcano Event, Sea Event, Mirage And Race, Fruit And Raid,
+          Quest And Item, Разное
+]]
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "VEIL | Blox Fruits Part 2",
+    LoadingTitle = "Загрузка Part 2...",
+    LoadingSubtitle = "by q13109747-debug",
+    ConfigurationSaving = {
+        Enabled = true, FolderName = "VEIL", FileName = "BloxConfig2"
+    },
+    KeySystem = false
+})
+
+getgenv().VEIL = getgenv().VEIL or {}
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local StarterGui = game:GetService("StarterGui")
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+local LP = Players.LocalPlayer
+
+local function notify(t, x, d)
+    pcall(function()
+        StarterGui:SetCore("SendNotification", {
+            Title = t, Text = x, Duration = d or 3
+        })
+    end)
+end
+
+local function getHRP()
+    local c = LP.Character
+    return c and c:FindFirstChild("HumanoidRootPart")
+end
+
+-- ============================================
+--          VOLCANO EVENT
+-- ============================================
+
+local VolcanoTab = Window:CreateTab("Volcano Event", 4483362458)
+
+VolcanoTab:CreateSection("Drago Trial")
+VolcanoTab:CreateToggle({Name="Tween To Upgrade Droco Trial", CurrentValue=false, Flag="V1",
+    Callback=function(v) VEIL.TweenDroco = v end})
+VolcanoTab:CreateToggle({Name="Auto Drago (V1)", CurrentValue=false, Flag="V2",
+    Callback=function(v) VEIL.AutoDragoV1 = v end})
+VolcanoTab:CreateToggle({Name="Auto Drago (V2)", CurrentValue=false, Flag="V3",
+    Callback=function(v) VEIL.AutoDragoV2 = v end})
+VolcanoTab:CreateToggle({Name="Auto Drago (V3)", CurrentValue=false, Flag="V4",
+    Callback=function(v) VEIL.AutoDragoV3 = v end})
+VolcanoTab:CreateToggle({Name="Auto Relic Drago Trial [Beta]", CurrentValue=false, Flag="V5",
+    Callback=function(v) VEIL.AutoRelicDrago = v end})
+VolcanoTab:CreateToggle({Name="Auto Train Drago v4", CurrentValue=false, Flag="V6",
+    Callback=function(v) VEIL.AutoTrainDrago = v end})
+VolcanoTab:CreateToggle({Name="Tween to Drago Trials", CurrentValue=false, Flag="V7",
+    Callback=function(v) VEIL.TweenDragoTrials = v end})
+VolcanoTab:CreateToggle({Name="Swap Drago Race", CurrentValue=false, Flag="V8",
+    Callback=function(v) VEIL.SwapDragoRace = v end})
+VolcanoTab:CreateToggle({Name="Upgrade Dragon Talon With Uzoth", CurrentValue=false, Flag="V9",
+    Callback=function(v) VEIL.UpgradeDragonTalon = v end})
+
+VolcanoTab:CreateSection("Prehistoric Island")
+VolcanoTab:CreateButton({Name="Craft Volcanic Magnet",
+    Callback=function() notify("Volcano","Crafting magnet...",2) end})
+VolcanoTab:CreateToggle({Name="Craft Volcanic Magnet", CurrentValue=false, Flag="V10",
+    Callback=function(v) VEIL.CraftMagnet = v end})
+VolcanoTab:CreateToggle({Name="Auto Find Prehistoric Island", CurrentValue=false, Flag="V11",
+    Callback=function(v) VEIL.FindPrehistoric = v end})
+VolcanoTab:CreateToggle({Name="Auto Start Prehistoric Event", CurrentValue=false, Flag="V12",
+    Callback=function(v) VEIL.StartPrehistoric = v end})
+VolcanoTab:CreateToggle({Name="Auto Patch Prehistoric Event", CurrentValue=false, Flag="V13",
+    Callback=function(v) VEIL.PatchPrehistoric = v end})
+VolcanoTab:CreateToggle({Name="Kill Aura", CurrentValue=false, Flag="V14",
+    Callback=function(v) VEIL.KillAura = v end})
+VolcanoTab:CreateToggle({Name="Auto Collect Dino Bones", CurrentValue=false, Flag="V15",
+    Callback=function(v) VEIL.CollectDinoBones = v end})
+VolcanoTab:CreateToggle({Name="Auto Collect Dragon Eggs", CurrentValue=false, Flag="V16",
+    Callback=function(v) VEIL.CollectDragonEggs = v end})
+VolcanoTab:CreateToggle({Name="Auto Reset When Complete Volcano", CurrentValue=false, Flag="V17",
+    Callback=function(v) VEIL.ResetVolcano = v end})
+
+VolcanoTab:CreateSection("Volcanic Crafting")
+VolcanoTab:CreateButton({Name="Craft Dragonheart",
+    Callback=function() notify("Volcano","Craft Dragonheart",2) end})
+VolcanoTab:CreateButton({Name="Craft Dragonstorm",
+    Callback=function() notify("Volcano","Craft Dragonstorm",2) end})
+VolcanoTab:CreateButton({Name="Craft Dino Hood",
+    Callback=function() notify("Volcano","Craft Dino Hood",2) end})
+VolcanoTab:CreateButton({Name="Craft T-Rex Skull",
+    Callback=function() notify("Volcano","Craft T-Rex Skull",2) end})
+
+VolcanoTab:CreateSection("Dojo Quest")
+VolcanoTab:CreateButton({Name="Button",
+    Callback=function() notify("Dojo","Button pressed",2) end})
+VolcanoTab:CreateToggle({Name="Auto Dojo Trainer", CurrentValue=false, Flag="V18",
+    Callback=function(v) VEIL.AutoDojo = v end})
+VolcanoTab:CreateToggle({Name="Auto Dragon Hunter", CurrentValue=false, Flag="V19",
+    Callback=function(v) VEIL.AutoDragonHunter = v end})
+
+-- ============================================
+--          SEA EVENT
+-- ============================================
+
+local SeaTab = Window:CreateTab("Sea Event", 4483362458)
+
+SeaTab:CreateSection("Crafting Items")
+for _, item in pairs({"SharkTooth","TerrorJaw","SharkAnchor","LeviathanCrown",
+                     "LeviathanShield","LeviathanBoat","LegendaryScroll","MythicalScroll"}) do
+    SeaTab:CreateButton({
+        Name = "Craft " .. item,
+        Callback = function() notify("Craft", item, 2) end
+    })
+end
+
+SeaTab:CreateSection("Entity Sea Event")
+for _, ent in pairs({"Shark","Piranha","Terror Shark","Fish Crew Member",
+                    "Haunted Crew Member","Attack PirateGrandBrigade",
+                    "Attack Fish Boat","Attack Sea Beast"}) do
+    SeaTab:CreateToggle({
+        Name = "Auto " .. ent, CurrentValue = false,
+        Flag = "Sea_" .. ent:gsub("%s",""),
+        Callback = function(v) VEIL["Sea_"..ent] = v end
+    })
+end
+
+SeaTab:CreateSection("Ship Settings")
+SeaTab:CreateToggle({Name="Ship Speed Modifier", CurrentValue=false, Flag="SSM",
+    Callback=function(v) VEIL.ShipSpeedMod = v end})
+SeaTab:CreateSlider({Name="Ship Speed",
+    Range={100, 1000}, Increment=10, Suffix="",
+    CurrentValue=300, Flag="ShipSpd",
+    Callback=function(v) VEIL.ShipSpeed = v end})
+SeaTab:CreateToggle({Name="Auto Press W", CurrentValue=false, Flag="APW",
+    Callback=function(v) VEIL.AutoPressW = v end})
+SeaTab:CreateToggle({Name="No Clip Ship", CurrentValue=false, Flag="NCS",
+    Callback=function(v) VEIL.NoClipShip = v end})
+SeaTab:CreateButton({Name="Remove Lighting Effect",
+    Callback=function() notify("Sea","Lighting removed",2) end})
+
+SeaTab:CreateSection("Choose Sea Event")
+SeaTab:CreateDropdown({
+    Name = "Select Boats",
+    Options = {"Guardian","Pirate","Marine","Fishman"},
+    CurrentOption = {"Guardian"}, Flag = "Boat",
+    Callback = function(o) VEIL.Boat = o[1] end
+})
+SeaTab:CreateButton({Name="Buy Boats",
+    Callback=function() notify("Sea","Buying boat",2) end})
+SeaTab:CreateDropdown({
+    Name = "Select Sea Level",
+    Options = {"Lv 1","Lv 2","Lv 3","Lv 4","Lv 5","Lv 6"},
+    CurrentOption = {"Lv 1"}, Flag = "SeaLevel",
+    Callback = function(o) VEIL.SeaLevel = o[1] end
+})
+SeaTab:CreateToggle({Name="Auto Sail Boat", CurrentValue=false, Flag="ASB2",
+    Callback=function(v) VEIL.AutoSailBoat = v end})
+
+SeaTab:CreateSection("Kitsune Island / Event")
+SeaTab:CreateToggle({Name="Auto Find Kitsune Island", CurrentValue=false, Flag="KIF",
+    Callback=function(v) VEIL.FindKitsune = v end})
+SeaTab:CreateToggle({Name="Auto Teleport to Shrine Activated", CurrentValue=false, Flag="KTS",
+    Callback=function(v) VEIL.TPKitsuneShrine = v end})
+SeaTab:CreateToggle({Name="Auto Collect Azure Ember", CurrentValue=false, Flag="KAE",
+    Callback=function(v) VEIL.CollectAzure = v end})
+SeaTab:CreateToggle({Name="Auto Trade Azure Ember", CurrentValue=false, Flag="KTE",
+    Callback=function(v) VEIL.TradeAzure = v end})
+SeaTab:CreateButton({Name="Trade Items Azure",
+    Callback=function() notify("Kitsune","Trading azure...",2) end})
+
+-- ============================================
+--          MIRAGE AND RACE
+-- ============================================
+
+local MirageTab = Window:CreateTab("Mirage And Race", 4483362458)
+
+MirageTab:CreateSection("Mirage Island")
+MirageTab:CreateToggle({Name="Auto Find Mirage Island", CurrentValue=false, Flag="MFI",
+    Callback=function(v) VEIL.FindMirage = v end})
+MirageTab:CreateToggle({Name="Auto Buy Mirage Fruit", CurrentValue=false, Flag="MBF",
+    Callback=function(v) VEIL.BuyMirage = v end})
+MirageTab:CreateToggle({Name="Tween To Mirage Dealer", CurrentValue=false, Flag="MTD",
+    Callback=function(v) VEIL.TweenMirageDealer = v end})
+
+MirageTab:CreateSection("Race")
+MirageTab:CreateDropdown({
+    Name = "Select Race",
+    Options = {"Human","Skypiea","Fishman","Cyborg","Ghoul","Mink","Drago"},
+    CurrentOption = {"Human"}, Flag = "Race",
+    Callback = function(o) VEIL.Race = o[1] end
+})
+MirageTab:CreateButton({Name="Auto Race Awakening",
+    Callback=function() notify("Race","Awakening start",2) end})
+MirageTab:CreateButton({Name="Swap Race",
+    Callback=function() notify("Race","Swap",2) end})
+
+-- ============================================
+--          FRUIT AND RAID
+-- ============================================
+
+local FruitTab = Window:CreateTab("Fruit And Raid", 4483362458)
+
+FruitTab:CreateSection("Fruit Spinner — Sky Island")
+FruitTab:CreateToggle({
+    Name = "Auto Roll Fruit (Sky Island)",
+    CurrentValue = false, Flag = "SkyRoll",
+    Callback = function(v) VEIL.SkyRoll = v end
+})
+FruitTab:CreateSlider({
+    Name = "Roll Budget (Beli)",
+    Range = {100000, 10000000}, Increment = 100000, Suffix = " Beli",
+    CurrentValue = 1000000, Flag = "RollBudget",
+    Callback = function(v) VEIL.RollBudget = v end
+})
+FruitTab:CreateToggle({
+    Name = "Auto Buy Fruit Shop",
+    CurrentValue = false, Flag = "ABF",
+    Callback = function(v) VEIL.AutoBuyFruit = v end
+})
+FruitTab:CreateDropdown({
+    Name = "Select Fruit To Buy",
+    Options = {"Rocket","Spin","Chop","Spring","Bomb","Smoke","Spike","Flame",
+               "Falcon","Ice","Sand","Dark","Diamond","Light","Rubber","Barrier",
+               "Magma","Door","Quake","Buddha","Love","Spider","Sound","Phoenix",
+               "Portal","Rumble","Pain","Blizzard","Gravity","Mammoth","T-Rex",
+               "Dough","Shadow","Venom","Control","Spirit","Dragon","Leopard","Kitsune"},
+    CurrentOption = {"Kitsune"}, Flag = "BuyFruit",
+    Callback = function(o) VEIL.BuyFruitTarget = o[1] end
+})
+
+FruitTab:CreateSection("Fruit Store")
+FruitTab:CreateToggle({Name="Auto Random Fruit", CurrentValue=false, Flag="ARF",
+    Callback=function(v) VEIL.AutoRandomFruit = v end})
+FruitTab:CreateToggle({Name="Auto Drop Fruit", CurrentValue=false, Flag="ADF",
+    Callback=function(v) VEIL.AutoDropFruit = v end})
+FruitTab:CreateToggle({Name="Auto Store Fruit", CurrentValue=false, Flag="ASF",
+    Callback=function(v) VEIL.AutoStoreFruit = v end})
+FruitTab:CreateToggle({Name="Auto Tween to Fruit", CurrentValue=false, Flag="ATF",
+    Callback=function(v) VEIL.AutoTweenFruit = v end})
+FruitTab:CreateToggle({Name="Auto Collect Fruit", CurrentValue=false, Flag="ACF",
+    Callback=function(v) VEIL.AutoCollectFruit = v end})
+
+FruitTab:CreateSection("Dungeon Event / Raiding")
+FruitTab:CreateDropdown({
+    Name = "Select Chip",
+    Options = {"Flame","Ice","Quake","Light","Dark","String","Rumble","Magma"},
+    CurrentOption = {"Flame"}, Flag = "Chip",
+    Callback = function(o) VEIL.Chip = o[1] end
+})
+FruitTab:CreateToggle({Name="Auto Select Dungeon Chip", CurrentValue=false, Flag="ASDC",
+    Callback=function(v) VEIL.AutoSelectChip = v end})
+FruitTab:CreateToggle({Name="Get Fruit In Inventory Below 1M", CurrentValue=false, Flag="GFIB",
+    Callback=function(v) VEIL.GetFruitBelow1M = v end})
+FruitTab:CreateButton({Name="Buy Dungeon Chips [Beli]",
+    Callback=function() notify("Dungeon","Buy chips (Beli)",2) end})
+FruitTab:CreateButton({Name="Buy Dungeon Chips [Devil Fruit]",
+    Callback=function() notify("Dungeon","Buy chips (Fruit)",2) end})
+FruitTab:CreateToggle({Name="Auto Buy Chip [Beli]", CurrentValue=false, Flag="ABCB",
+    Callback=function(v) VEIL.BuyChipBeli = v end})
+FruitTab:CreateToggle({Name="Auto Buy Chip [Devil Fruit]", CurrentValue=false, Flag="ABCF",
+    Callback=function(v) VEIL.BuyChipFruit = v end})
+FruitTab:CreateToggle({Name="Auto Start Raid", CurrentValue=false, Flag="ASR",
+    Callback=function(v) VEIL.AutoStartRaid = v end})
+FruitTab:CreateToggle({Name="Auto Raid + Next Island", CurrentValue=false, Flag="ARNI",
+    Callback=function(v) VEIL.AutoRaidNext = v end})
+FruitTab:CreateToggle({Name="Auto Awakening", CurrentValue=false, Flag="AA",
+    Callback=function(v) VEIL.AutoAwakening = v end})
+FruitTab:CreateToggle({Name="Auto Teleport To Lab", CurrentValue=false, Flag="ATL",
+    Callback=function(v) VEIL.AutoTPLab = v end})
+
+FruitTab:CreateSection("Raids Dungeons")
+FruitTab:CreateToggle({Name="Auto Farm Dungeon", CurrentValue=false, Flag="AFD",
+    Callback=function(v) VEIL.AutoFarmDungeon = v end})
+FruitTab:CreateToggle({Name="TP Exit (1)", CurrentValue=false, Flag="EX1",
+    Callback=function(v) VEIL.TPExit1 = v end})
+FruitTab:CreateToggle({Name="TP Exit (2)", CurrentValue=false, Flag="EX2",
+    Callback=function(v) VEIL.TPExit2 = v end})
+FruitTab:CreateToggle({Name="TP Exit (3)", CurrentValue=false, Flag="EX3",
+    Callback=function(v) VEIL.TPExit3 = v end})
+FruitTab:CreateToggle({Name="TP Exit (4)", CurrentValue=false, Flag="EX4",
+    Callback=function(v) VEIL.TPExit4 = v end})
+
+FruitTab:CreateSection("Items Law/Order Sword")
+FruitTab:CreateButton({Name="Buy Microchip Law",
+    Callback=function() notify("Law","Buy chip",2) end})
+FruitTab:CreateButton({Name="Start Law Raids",
+    Callback=function() notify("Law","Start raid",2) end})
+FruitTab:CreateToggle({Name="Auto Buy Microchip Law", CurrentValue=false, Flag="ABML",
+    Callback=function(v) VEIL.BuyMicrochipLaw = v end})
+FruitTab:CreateToggle({Name="Auto Start Law Raids", CurrentValue=false, Flag="ASLR",
+    Callback=function(v) VEIL.StartLawRaids = v end})
+FruitTab:CreateToggle({Name="Auto Kill Law", CurrentValue=false, Flag="AKL",
+    Callback=function(v) VEIL.KillLaw = v end})
+
+-- Sky Spinner логика
+task.spawn(function()
+    while task.wait(1) do
+        if VEIL.SkyRoll then
+            local hrp = getHRP()
+            if not hrp then continue end
+            local shop = nil
+            for _, obj in pairs(workspace:GetDescendants()) do
+                if obj.Name:lower():find("fruit") and obj.Name:lower():find("dealer") then
+                    shop = obj; break
+                end
+            end
+            if shop then
+                hrp.CFrame = CFrame.new(shop.Position + Vector3.new(0, 5, 0), shop.Position)
+                task.wait(0.5)
+                local prompt = shop:FindFirstChildOfClass("ProximityPrompt")
+                if prompt then fireproximityprompt(prompt); task.wait(1) end
+                for _, btn in pairs(LP.PlayerGui:GetDescendants()) do
+                    if btn:IsA("TextButton") then
+                        local t = btn.Text and btn.Text:lower() or ""
+                        if t:find("random") or t:find("roll") or t:find("spin") then
+                            btn:Activate()
+                            task.wait(2)
+                            notify("Spinner", "Roll выполнен", 2)
+                            break
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+-- Auto Buy Fruit логика
+task.spawn(function()
+    while task.wait(2) do
+        if VEIL.AutoBuyFruit and VEIL.BuyFruitTarget then
+            local target = VEIL.BuyFruitTarget:lower()
+            for _, obj in pairs(LP.PlayerGui:GetDescendants()) do
+                if obj:IsA("TextLabel") then
+                    if obj.Text:lower():find(target) then
+                        local parent = obj.Parent
+                        for _, btn in pairs(parent:GetDescendants()) do
+                            if btn:IsA("TextButton") and btn.Text:lower():find("buy") then
+                                btn:Activate()
+                                notify("Auto Buy", "Куплен: " .. VEIL.BuyFruitTarget, 3)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+-- ============================================
+--          QUEST AND ITEM
+-- ============================================
+
+local QuestTab = Window:CreateTab("Quest And Item", 4483362458)
+
+QuestTab:CreateSection("Main Quests")
+QuestTab:CreateToggle({Name="Auto Quest Sea 2", CurrentValue=false, Flag="QS2",
+    Callback=function(v) VEIL.QuestS2 = v end})
+QuestTab:CreateToggle({Name="Auto Quest Sea 3", CurrentValue=false, Flag="QS3",
+    Callback=function(v) VEIL.QuestS3 = v end})
+
+QuestTab:CreateSection("Skull Guitars / Misc")
+QuestTab:CreateToggle({Name="Auto Skull Guitar", CurrentValue=false, Flag="ASG",
+    Callback=function(v) VEIL.SkullGuitar = v end})
+QuestTab:CreateToggle({Name="Auto Farm Material Skull Guitar", CurrentValue=false, Flag="AFMSG",
+    Callback=function(v) VEIL.FarmMatSkull = v end})
+
+QuestTab:CreateSection("True Triple Katana Sword")
+QuestTab:CreateButton({Name="Buy Legendary Sword",
+    Callback=function() notify("Sword","Buy legendary",2) end})
+QuestTab:CreateButton({Name="Buy True Triple Katana Sword",
+    Callback=function() notify("Sword","Buy TTK",2) end})
+QuestTab:CreateToggle({Name="Tween to Legendary Sword Dealer", CurrentValue=false, Flag="TLSD",
+    Callback=function(v) VEIL.TweenLegendaryDealer = v end})
+
+QuestTab:CreateSection("Rengoku Sword")
+QuestTab:CreateToggle({Name="Auto Rengoku Sword", CurrentValue=false, Flag="ARS",
+    Callback=function(v) VEIL.RengokuSword = v end})
+QuestTab:CreateToggle({Name="Auto Key Rengoku", CurrentValue=false, Flag="AKR",
+    Callback=function(v) VEIL.KeyRengoku = v end})
+QuestTab:CreateToggle({Name="Auto Dragon Trident", CurrentValue=false, Flag="ADT",
+    Callback=function(v) VEIL.DragonTrident = v end})
+QuestTab:CreateToggle({Name="Auto Long Sword", CurrentValue=false, Flag="ALS",
+    Callback=function(v) VEIL.LongSword = v end})
+QuestTab:CreateToggle({Name="Auto Black Spikey", CurrentValue=false, Flag="ABS",
+    Callback=function(v) VEIL.BlackSpikey = v end})
+QuestTab:CreateToggle({Name="Auto Dark Blade V3", CurrentValue=false, Flag="ADBV3",
+    Callback=function(v) VEIL.DarkBladeV3 = v end})
+QuestTab:CreateToggle({Name="Auto Midnight Blade", CurrentValue=false, Flag="AMB",
+    Callback=function(v) VEIL.MidnightBlade = v end})
+QuestTab:CreateToggle({Name="Auto Darkbeard", CurrentValue=false, Flag="ADB",
+    Callback=function(v) VEIL.AutoDarkbeard = v end})
+QuestTab:CreateToggle({Name="Auto Unlocked DonSwan", CurrentValue=false, Flag="AUDS",
+    Callback=function(v) VEIL.UnlockDonSwan = v end})
+QuestTab:CreateToggle({Name="Auto Swan Glasses", CurrentValue=false, Flag="ASG2",
+    Callback=function(v) VEIL.SwanGlasses = v end})
+
+QuestTab:CreateSection("Buso/Aura Colours")
+QuestTab:CreateToggle({Name="Auto Teleport Barista Cousin", CurrentValue=false, Flag="ATBC",
+    Callback=function(v) VEIL.TPBaristaCousin = v end})
+QuestTab:CreateButton({Name="Buy Buso Colors",
+    Callback=function() notify("Buso","Buy colors",2) end})
+QuestTab:CreateToggle({Name="Auto Rainbow Colors", CurrentValue=false, Flag="ARC",
+    Callback=function(v) VEIL.RainbowColors = v end})
+QuestTab:CreateToggle({Name="Accept Rainbow Quest Faster", CurrentValue=false, Flag="ARQF",
+    Callback=function(v) VEIL.RainbowQuestFast = v end})
+
+QuestTab:CreateSection("Fighting Melee Styles")
+for _, style in pairs({"Superhuman","DeathStep","Sharkman Karate","ElectricClaw",
+                      "DragonTalon","Godhuman","SanguineArt"}) do
+    QuestTab:CreateToggle({
+        Name = "Auto " .. style, CurrentValue = false,
+        Flag = "FS_" .. style:gsub("%s",""),
+        Callback = function(v) VEIL["FS_"..style] = v end
+    })
+end
+
+QuestTab:Creat
